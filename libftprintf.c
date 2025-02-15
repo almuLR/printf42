@@ -6,7 +6,7 @@
 /*   By: almlopez <almlopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:51:02 by almlopez          #+#    #+#             */
-/*   Updated: 2025/02/15 15:44:40 by almlopez         ###   ########.fr       */
+/*   Updated: 2025/02/15 18:34:07 by almlopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	what_letter(char *str, int *i, va_list args)
 			return (ft_putnbr_unsigned(va_arg(args, unsigned int),
 			UNSIG_INT));
 		else if (str[*i] == 'x')
-			return (ft_putnbr_base(va_arg(args, int), H_LOW));
+			return (ft_putnbr_base(va_arg(args, unsigned int), H_LOW));
 		else if (str[*i] == 'X')
-			return (ft_putnbr_base(va_arg(args, int), H_UP));
+			return (ft_putnbr_base(va_arg(args, unsigned int), H_UP));
 		else if (str[*i] == '%')
 			return (ft_putchar_fd('%', 1));
 		
