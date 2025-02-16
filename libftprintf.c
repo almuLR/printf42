@@ -3,83 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   libftprintf.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almlopez <almlopez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: almudenalopezrodriguez <almudenalopezro    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:51:02 by almlopez          #+#    #+#             */
-/*   Updated: 2025/02/15 18:34:07 by almlopez         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:30:54 by almudenalop      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "ft_printf.h"
-# define H_LOW "0123456789abcdef"
-# define H_UP "0123456789ABCDEF"
-# define UNSIG_INT "0123456789"
+#define H_LOW "0123456789abcdef"
+#define H_UP "0123456789ABCDEF"
+#define UNSIG_INT "0123456789"
 
-int	what_letter(char *str, int *i, va_list args)
+int	do_operations(char c, va_list args)
 {
-	int count;
-
-	count = 0;
-	if (str[*i] == '%' && str[*i + 1])
-	{
-		(*i)++;
-		if (str[*i] == 'c')
-			return (ft_putchar_fd((unsigned char)va_arg(args, int),
-			1));
-		else if (str[*i] == 's')
-			return (ft_putstr_fd(va_arg(args, char *), 1));
-		else if (str[*i] == 'p')
-			return (ft_putptr(va_arg(args, void *), 1));
-		else if (str[*i] == 'd')
-			return (ft_putnbr_fd(va_arg(args, int), 1));
-		else if (str[*i] == 'i')
-			return (ft_putnbr_fd(va_arg(args, int), 1));
-		else if (str[*i] == 'u')
-			return (ft_putnbr_unsigned(va_arg(args, unsigned int),
-			UNSIG_INT));
-		else if (str[*i] == 'x')
-			return (ft_putnbr_base(va_arg(args, unsigned int), H_LOW));
-		else if (str[*i] == 'X')
-			return (ft_putnbr_base(va_arg(args, unsigned int), H_UP));
-		else if (str[*i] == '%')
-			return (ft_putchar_fd('%', 1));
-		
-	}
-	else if (str[*i] != '%')
-		return (ft_putchar_fd(str[*i], 1));
+	if (c == 'c')
+		return (ft_putchar_fd((unsigned char)va_arg(args, int), 1));
+	else if (c == 's')
+		return (ft_putstr_fd(va_arg(args, char *), 1));
+	else if (c == 'p')
+		return (ft_putptr(va_arg(args, void *), 1));
+	else if (c == 'd')
+		return (ft_putnbr_fd(va_arg(args, int), 1));
+	else if (c == 'i')
+		return (ft_putnbr_fd(va_arg(args, int), 1));
+	else if (c == 'u')
+		return (ft_putnbr_unsigned(va_arg(args, unsigned int),
+				UNSIG_INT));
+	else if (c == 'x')
+		return (ft_putnbr_base(va_arg(args, unsigned int), H_LOW));
+	else if (c == 'X')
+		return (ft_putnbr_base(va_arg(args, unsigned int), H_UP));
+	else if (c == '%')
+		return (ft_putchar_fd('%', 1));
 	return (0);
+}
+
+int	search_letter(char *str, int *i, va_list args)
+{
+	if (str[*i] == '%' && str[*i + 1])
+		return (do_operations(str[++(*i)], args));
+	return (ft_putchar_fd(str[*i], 1));
 }
 
 int	ft_printf(char const *str, ...)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 	va_list	args;
 
 	if (!str)
-		return(-1);
+		return (-1);
 	i = 0;
 	count = 0;
 	va_start(args, str);
 	while (str[i] != '\0')
 	{
-		count += what_letter((char *)str, &i, args);
+		count += search_letter((char *)str, &i, args);
 		i++;
 	}
 	va_end(args);
 	return (count);
 }
-
-//tiene que devolver NIL no NULL
-/*#include <stdio.h>
-int main ()
-{
-	ft_printf("%c", '0');
-	ft_printf("%s", "holaholahola");
-	ft_printf("%i", 12345);
-	printf("%c", 'a');
-	printf("%s", "holaholahola");
-	printf("%i", 12345);
-	return (0);
-}*/
